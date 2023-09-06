@@ -8,18 +8,10 @@ class Course
   end
 
   def full?
-    if @students.count >= @capacity
-      true
-    else
-      false
-    end
+    @students.count >= @capacity
   end
 
   def enroll(student)
     @students << student
   end
 end
-
-#students attribute
-#full? method
-#enroll method
