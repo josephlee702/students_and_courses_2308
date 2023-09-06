@@ -4,21 +4,30 @@ require './lib/student'
 require './lib/gradebook'
 
 RSpec.describe Gradebook do
+  before(:each) do
+    @calculus = Course.new("Calculus", 2)
+    @joseph = Student.new({name: "Joseph", age: 26})
+    @jane = Student.new({name: "Jane", age: 25})
+    @calculus.enroll(@joseph)
+    @calculus.enroll(@jane)
+    @gradebook = Gradebook.new("Mr. Smith")
+  end
+  
   it "exists" do
-    gradebook = Gradebook.new("Mr. Smith")
-    expect(gradebook).to be_instance_of(Gradebook)
+    expect(@gradebook).to be_instance_of(Gradebook)
+    expect(@gradebook.instructor).to eq("Mr. Smith")
+    expect(@gradebook.courses).to eq([])
   end
 
-  it "checks the instructor and courses" do
-    gradebook = Gradebook.new("Mr. Smith")
-    expect(gradebook.instructor).to eq("Mr. Smith")
-    expect(gradebook.courses).to eq([])
+  it "adds courses" do
+    @gradebook.add_course(@calculus)
+    expect(@gradebook.courses).to eq([@calculus])
   end
 
-  it "adds courses to the gradebook" do
-    gradebook = Gradebook.new("Mr. Smith")
-    calculus = Course.new("Calculus", 3)
-    gradebook.add_course(calculus)
-    expect(gradebook.courses).to eq([calculus])
+  it "lists all students" do
+    @gradebook.add_course(@calculus)
+    expect(@gradebook.list_all_students).to eq({
+      @calculus => [@joseph, @jane]
+    })
   end
 end
